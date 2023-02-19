@@ -17,7 +17,7 @@ def create_app():
     def index():
         cur = mysql.connection.cursor()
         cur.execute(
-            """SELECT id, base FROM words WHERE hidden_at IS NULL limit 1""")
+            """SELECT id, base FROM words WHERE hidden_at IS NULL ORDER BY RAND() limit 1""")
         rv = cur.fetchall()
         question = None
         if rv:
