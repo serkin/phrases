@@ -1,3 +1,5 @@
 flask-mysqldb
 mysqlclient
 gunicorn
+mysql-connector-python
+anki-export

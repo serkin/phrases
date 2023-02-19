@@ -8,13 +8,15 @@
 {% if result == "fail" %}
 <table class="ui table">
     <tr>
-        <td>Correct answer</td>
         <td class="positive">{{ correct_answer }}</td>
+        <td>{{ question }}</td>
     </tr>
-    <tr>
-        <td>Your answer</td>
-        <td class="negative">{{ answer }}</td>
-    </tr>
+    {% if answer %}
+        <tr>
+            <td class="negative">{{ answer }}</td>
+            <td>{{ question }}</td>
+        </tr>
+    {% endif %}
 </table>
 {% endif %}
 

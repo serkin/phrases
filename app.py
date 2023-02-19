@@ -7,15 +7,9 @@ app.config["MYSQL_USER"] = os.getenv('MYSQL_USER', 'root')
 app.config["MYSQL_DB"] = os.getenv('MYSQL_DB', 'phrases')
 app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', '0.0.0.0')
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-# app.config["MYSQL_UNIX_SOCKET"] = ""
-# app.config["MYSQL_PASSWORD"] = ""
 
 mysql = MySQL(app)
 
-
-# @app.route("/")
-# def index():
-#     return render_template("index.html")
 
 def create_app():
 
@@ -41,15 +35,16 @@ def create_app():
         cur.execute(
             """SELECT base, th FROM words WHERE id=%s LIMIT 1""", (word_id,))
         rv = cur.fetchall()
-        if rv[0]["th"] == form.get('answer'):
+        if answer and rv[0]["th"] == answer:
             result = "success"
             answer = None
 
-        cur.execute("""INSERT INTO log (word_id, status, answer) values(%s, %s, %s);""",
-                    (form.get('word_id'), result, answer))
-        mysql.connection.commit()
+        if answer:
+            cur.execute("""INSERT INTO log (word_id, status, answer) values(%s, %s, %s);""",
+                        (form.get('word_id'), result, answer))
+            mysql.connection.commit()
         cur.close()
-        return render_template("answer.html", stat=_stat(), result=result, answer=answer, word_id=word_id, correct_answer=rv[0]["th"])
+        return render_template("answer.html", stat=_stat(), result=result, question=rv[0]["base"], answer=answer, word_id=word_id, correct_answer=rv[0]["th"])
 
     @app.route("/never")
     def never():
@@ -64,7 +59,7 @@ def create_app():
     def _stat():
         stat = {
             "fail": 0,
-            "successl": 0
+            "success": 0
         }
         cur = mysql.connection.cursor()
 
