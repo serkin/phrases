@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css"
+    integrity="sha512-n//BDM4vMPvyca4bJjZPDh7hlqsQ7hqbP9RH18GF2hTXBY5amBwM2501M0GPiwCU/v9Tor2m13GOTFjk00tkQA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .container {
+        margin: 10px;
+    }
+</style>
+<div class="ui container">
+    <div class="ui grid">
+        <div class="sixteen wide column">
+            {% block content %}
+
+            {% endblock %}
+
+            <div class="ui statistics">
+                <div class="statistic">
+                    <div class="value">
+                        {{ stat.fail }}
+                    </div>
+                    <div class="label">
+                        Failes
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        {{ stat.success }}
+                    </div>
+                    <div class="label">
+                        Success
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>{{ result }}</h1>
+
+
+
+{% if result == "fail" %}
+<table class="ui table">
+    <tr>
+        <td>Correct answer</td>
+        <td class="positive">{{ correct_answer }}</td>
+    </tr>
+    <tr>
+        <td>Your answer</td>
+        <td class="negative">{{ answer }}</td>
+    </tr>
+</table>
+{% endif %}
+
+<p><a href="/" class="ui teal button">next --></a></p>
+
+{% if result == "success" %}
+<p><a href="{{ url_for('never', word_id=word_id) }}" class="ui red tiny button">never</a></p>
+{% endif %}
+{% endblock %}
