@@ -6,7 +6,7 @@
 <p><span class="ui big text">{{ question }}</span></p>
 
 {% if result == "fail" %}
-    <p><span class="ui huge green text">{{ correct_answer }}</span></p>
+    <p><span class="ui huge green text">{{ correct_answer }}</span>{% if comment %} [{{ comment }}]{% endif %}</p>
 
     {% if answer %}
     <p><span class="ui huge red text">{{ answer }}</span></p>

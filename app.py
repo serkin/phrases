@@ -33,7 +33,7 @@ def create_app():
         answer = form.get('answer')
         cur = mysql.connection.cursor()
         cur.execute(
-            """SELECT base, th FROM words WHERE id=%s LIMIT 1""", (word_id,))
+            """SELECT base, th, comment FROM words WHERE id=%s LIMIT 1""", (word_id,))
         rv = cur.fetchall()
         if answer and rv[0]["th"] == answer:
             result = "success"
@@ -44,7 +44,7 @@ def create_app():
                         (form.get('word_id'), result, answer))
             mysql.connection.commit()
         cur.close()
-        return render_template("answer.html", stat=_stat(), result=result, question=rv[0]["base"], answer=answer, word_id=word_id, correct_answer=rv[0]["th"])
+        return render_template("answer.html", stat=_stat(), result=result, comment=rv[0]["comment"], question=rv[0]["base"], answer=answer, word_id=word_id, correct_answer=rv[0]["th"])
 
     @app.route("/never")
     def never():
