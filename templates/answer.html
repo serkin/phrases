@@ -3,26 +3,20 @@
 {% block content %}
 <h1>{{ result }}</h1>
 
-
+<p><span class="ui big text">{{ question }}</span></p>
 
 {% if result == "fail" %}
-<table class="ui table">
-    <tr>
-        <td class="positive">{{ correct_answer }}</td>
-        <td>{{ question }}</td>
-    </tr>
+    <p><span class="ui huge green text">{{ correct_answer }}</span></p>
+
     {% if answer %}
-        <tr>
-            <td class="negative">{{ answer }}</td>
-            <td>{{ question }}</td>
-        </tr>
+    <p><span class="ui huge red text">{{ answer }}</span></p>
     {% endif %}
-</table>
+
 {% endif %}
 
-<p><a href="/" class="ui teal button">next --></a></p>
+<p><a href="/" class="ui teal massive button">Next</a></p>
 
 {% if result == "success" %}
-<p><a href="{{ url_for('never', word_id=word_id) }}" class="ui red tiny button">never</a></p>
+<p><a href="{{ url_for('never', word_id=word_id) }}" class="ui red massive button">Never</a></p>
 {% endif %}
 {% endblock %}
