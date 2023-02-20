@@ -40,5 +40,13 @@ docker build -f Dockerfile -t phrases .
 docker rm -f phrases || true
 docker run -d --name phrases --link mysql:mysql  -e 'MYSQL_HOST=mysql' -p 8080:5000 --restart always phrases
 
-ssh -fN  -L 3307:127.0.0.1:3306 root@45.143.94.176
+```
+shortcut
+```bash
+cd ~/phrases && \
+    git pull && \
+    docker build -f Dockerfile -t phrases . && \
+    docker rm -f phrases || true && \
+    docker run -d --name phrases --link mysql:mysql  -e 'MYSQL_HOST=mysql' -p 8080:5000 --restart always phrases
+
 ```
