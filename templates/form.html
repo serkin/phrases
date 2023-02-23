@@ -1,0 +1,9 @@
+<h1>{{ word.base }}</h1>
+
+<form action="{{ url_for('answer') }}" method="post" autocomplete="off" class="ui form">
+    <input type="hidden" name="word_id" value="{{ word.id }}">
+
+    <input name="user_answer" style="width: 100%; height: 36px;">
+    <br /><br />
+    <button type="submit" style="width: 100%; height: 36px;" class="ui teal button">Check</button>
+</form>
