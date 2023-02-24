@@ -50,7 +50,7 @@ ORDER BY
         words = defaultdict(dict)
         for word in cur.fetchall():
             words[word["id"]] = dict(
-                th=word["th"], base=word["base"], fail=0, success=1, is_active=word["is_active"])
+                th=word["th"], base=word["base"], fail=0, success=0, is_active=word["is_active"])
             words[word["id"]][word["status"]] = word["total"]
         cur.close()
         return render_template("words.html", stat=_stat(), words=words)
