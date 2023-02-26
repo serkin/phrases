@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<table class="ui compact celled table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Описание</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dialog in dialogs %}
+        <tr>
+            <td><a href="{{ url_for('dialog', dialog_id=dialog.id) }}">{{ dialog.id }}</a></td>
+            <td>{{ dialog.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

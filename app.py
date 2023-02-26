@@ -26,6 +26,35 @@ def create_app():
         cur.close()
         return render_template("index.html", stat=_stat(), word=word)
 
+    @app.route("/dialogs")
+    def dialogs():
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM dialogs;")
+        dialogs = cur.fetchall()
+        cur.close()
+        return render_template("dialogs.html", stat=_stat(), dialogs=dialogs)
+
+    @app.route("/dialogs/<dialog_id>")
+    def dialog(dialog_id):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM dialogs where id = %s;", (dialog_id))
+        _dialog = cur.fetchall()[0]
+        cur.execute("""SELECT
+    dialog_persons.name as dialog_person_name,
+    words.id as word_id,
+    words.base
+FROM
+    dialogs
+LEFT JOIN dialog_words on dialog_words.dialog_id = dialogs.id
+LEFT JOIN dialog_persons on dialog_persons.id = dialog_words.dialog_person_id
+LEFT JOIN words on words.id = dialog_words.word_id
+WHERE
+    dialogs.id = %s
+ORDER BY dialog_words.id;""", (dialog_id))
+        dialog_words = cur.fetchall()
+        cur.close()
+        return render_template("dialog.html", stat=_stat(), dialog=_dialog, dialog_words=dialog_words)
+
     @app.route("/words")
     def words():
         cur = mysql.connection.cursor()
@@ -71,7 +100,7 @@ ORDER BY
                 result = "success"
             else:
                 result = "fail"
-        if user_answer:
+        if user_answer and not form.get('second_attempt'):
             cur.execute("""INSERT INTO log (word_id, status, answer) values(%s, %s, %s);""",
                         (form.get('word_id'), result, user_answer))
             mysql.connection.commit()

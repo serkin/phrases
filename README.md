@@ -1,4 +1,8 @@
 # Phrases
+
+## Todo
+- Не считать попытку если исправление
+- 
 This app helps me to learn Thai
 - [figma](https://www.figma.com/file/okoaQC85mWsw2W7aBZY9Hv/Phrases?node-id=0%3A1&t=sHIDdoooyc8nmOxC-0)
 - [flask-mysqldb](https://github.com/alexferl/flask-mysqldb)
