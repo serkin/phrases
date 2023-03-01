@@ -73,7 +73,7 @@ LEFT JOIN log ON words.id = log.word_id
 WHERE
     words.hidden_at IS NULL {"AND DATE(log.timestamp) = CURDATE()" if not show_all_words else ""}
 GROUP BY
-    log.status, base
+    log.status, base, words.id, th, is_active
 ORDER BY
     is_active desc, base;""")
         words = defaultdict(dict)
