@@ -17,8 +17,18 @@ def create_app():
     @app.route("/")
     def index():
         cur = mysql.connection.cursor()
-        cur.execute(
-            """SELECT id, base FROM words WHERE hidden_at IS NULL AND is_active = 1 ORDER BY RAND() limit 1""")
+        cur.execute("""
+SELECT
+    words.id,
+    base
+FROM
+    `words`
+LEFT JOIN log ON log.word_id = words.id
+WHERE
+    hidden_at IS NULL AND is_active = 1
+ORDER BY
+    log.timestamp
+LIMIT 1;""")
         rv = cur.fetchall()
         word = None
         if rv:

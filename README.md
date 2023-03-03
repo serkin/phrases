@@ -2,7 +2,16 @@
 
 ## Todo
 - Не считать попытку если исправление
-- 
+- Редактирование слова
+- Показывать слово даже если правильно
+- Ссылки внизу сделать менюшкой
+- Форма добавления нового слова
+- Возможность пройти слово выбрать самостоятельно - http://159.69.208.209:8080/answer?word_id=80
+- Показывать входящие слова
+- Добавлять\удалять входящие слова
+- Добавлять слова в диалоги
+
+
 This app helps me to learn Thai
 - [figma](https://www.figma.com/file/okoaQC85mWsw2W7aBZY9Hv/Phrases?node-id=0%3A1&t=sHIDdoooyc8nmOxC-0)
 - [flask-mysqldb](https://github.com/alexferl/flask-mysqldb)
