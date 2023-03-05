@@ -9,32 +9,22 @@
 <div class="ui container">
     <div class="ui grid">
         <div class="sixteen wide column">
-            <p><a href="{{ url_for('index') }}">Home</a></p>
+            <p><a href="{{ url_for('home') }}">Home</a></p>
             {% block content %}
 
             {% endblock %}
-
-            <div class="ui statistics">
-                <div class="statistic">
-                    <div class="value">
-                        {{ stat.fail }}
-                    </div>
-                    <div class="label">
-                        Failes
-                    </div>
-                </div>
-                <div class="statistic">
-                    <div class="value">
-                        {{ stat.success }}
-                    </div>
-                    <div class="label">
-                        Success
-                    </div>
-                </div>
+            <p></p>
+            <div class="ui compact menu">
+                {% if word and word.id %}
+                <a class="item" class="ui teal button" href="{{ url_for('words.word.edit', word_id=word.id) }}">Edit</a>
+                {% endif %}
+                <a class="item" class="ui teal button" href="{{ url_for('words.create') }}">Create</a>
+                <div class="item">Failes - {{ stat.fail }}</div>
+                <div class="item">Success - {{ stat.success }}</div>
+                <a class="item" href="{{ url_for('words.index') }}">Todays Words</a>
+                <a class="item" href="{{ url_for('words.index', show_all_words=1) }}">All Words</a>
+                <a class="item" href="{{ url_for('dialogs.index') }}">Dialogs</a>
             </div>
-            <div><a href="{{ url_for('words') }}">Todays Words</a></div>
-            <div><a href="{{ url_for('words', show_all_words=1) }}">All Words</a></div>
-            <div><a href="{{ url_for('dialogs') }}">Dialogs</a></div>
         </div>
     </div>
 </div>

@@ -7,9 +7,10 @@
 - Ссылки внизу сделать менюшкой
 - Форма добавления нового слова
 - Возможность пройти слово выбрать самостоятельно - http://159.69.208.209:8080/answer?word_id=80
-- Показывать входящие слова
 - Добавлять\удалять входящие слова
 - Добавлять слова в диалоги
+- Тесты
+- Бекапы базы данных
 
 
 This app helps me to learn Thai
@@ -25,13 +26,6 @@ This app helps me to learn Thai
 - [Pocket Thai Vocabulary](https://ankiweb.net/shared/info/293019843)
 - [1000 Most Common Thai Words [TH,EN,DE,MP3,HiddenPhonetic]](https://ankiweb.net/shared/info/2201805440)
 - [1000 Most Common Thai Words [EN/TH/EN, Sound, Examples] v2](https://ankiweb.net/shared/info/416262160)
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
 - []()
 ## Run locally
 ```python

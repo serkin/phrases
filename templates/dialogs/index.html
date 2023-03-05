@@ -12,7 +12,7 @@
     <tbody>
         {% for dialog in dialogs %}
         <tr>
-            <td><a href="{{ url_for('dialog', dialog_id=dialog.id) }}">{{ dialog.id }}</a></td>
+            <td><a href="{{ url_for('dialogs.dialog', dialog_id=dialog.id) }}">{{ dialog.id }}</a></td>
             <td>{{ dialog.description }}</td>
         </tr>
         {% endfor %}

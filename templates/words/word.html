@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<h1>{{ word.base }}</h1>
+{% if user_answer %}
+<p><span class="ui huge text">{{ word.th }}</span></p>
+<p><span class="ui huge {% if word.th == user_answer %}green{% else %}red{% endif %} text">{{ user_answer }}</span></p>
+{% endif %}
+
+{% if not user_answer or word.th != user_answer %}
+<form action="{{ url_for('words.word', word_id=word.id) }}" method="post" autocomplete="off" class="ui form">
+    <input type="hidden" name="word_id" value="{{ word.id }}">
+    {% if result == "fail" %}
+    <input type="hidden" name="second_attempt" value=1>
+
+    {% endif %}
+    <input name="user_answer" style="width: 100%; height: 36px;">
+    <br /><br />
+    <button type="submit" style="width: 100%; height: 36px;" class="ui teal button">Check</button>
+</form>
+{% endif %}
+
+{% if user_result == "success" %}
+<p><a href="{{ url_for('words.word.never', word_id=word.id) }}" class="ui red massive button">Never</a></p>
+{% endif %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/components/dropdown.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/components/dropdown.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/components/accordion.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/components/accordion.min.css">
+<script>
+    $(document).ready(function () {
+
+        $('.dropdown').dropdown({
+            clearable: true,
+            fullTextSearch: true,
+            filterRemoteData: true,
+            apiSettings: {
+                url: '/api/words',
+                cache: false
+            }
+        });
+
+        $('.ui.accordion').accordion()
+    });
+</script>
+
+
+<div class="ui styled accordion">
+    {% if children %}
+    <div class="title">
+        <i class="dropdown icon"></i>Входящие слова
+    </div>
+    <div class="content">
+        <p>
+        <table class="ui celled table">
+            {% for el in children %}
+            <tr>
+                <td>{{ el["base"] }}</td>
+                <td>{{ el["th"] }}</td>
+
+            </tr>
+            {% endfor %}
+        </table>
+        </p>
+    </div>
+    {% endif %}
+    <div class="title">
+        <i class="dropdown icon"></i>Добавить слово
+    </div>
+    <div class="content">
+        <p>
+        <form class="ui form" action="{{ url_for('words.word.bind', word_id=word.id) }}" method="post">
+            <div class="inline field">
+                <label>Слово</label>
+                <div>
+                    <select class="ui fluid search dropdown" name="word_id">
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="ui button">Привязать</button>
+        </form>
+        </p>
+    </div>
+</div>
+
+
+{% endblock %}
