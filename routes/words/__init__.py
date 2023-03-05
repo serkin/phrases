@@ -1,5 +1,5 @@
 from collections import defaultdict
-from flask import render_template, request, Blueprint, g
+from flask import redirect, render_template, request, Blueprint, g, url_for
 
 from utils import _stat
 from ..words import word as word_bp
@@ -7,9 +7,18 @@ from ..words import word as word_bp
 bp = Blueprint('words', __name__, url_prefix='/words')
 
 
-@bp.route("/create")
+@bp.route("/create", methods=['POST', 'GET'])
 def create():
-    pass
+    if request.method == "POST":
+        form = request.form
+        cur = g.mysql.connection.cursor()
+        cur.execute("INSERT INTO words (base, th, spelling,comment ) VALUES(%s, %s, %s, %s)",
+                    (form.get("base"), form.get("th"), form.get("spelling"), form.get("comment")))
+        g.mysql.connection.commit()
+
+        cur.close()
+        return redirect(url_for("words.word", word_id=cur.lastrowid))
+    return render_template("words/form.html", stat=_stat())
 
 
 @bp.route("/<word_id>", methods=['POST', 'GET'])

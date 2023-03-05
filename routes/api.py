@@ -9,7 +9,7 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 def words():
     result = []
     cur = g.mysql.connection.cursor()
-    cur.execute("SELECT id, base, th FROM  words")
+    cur.execute("SELECT id, base, th FROM words ORDER BY LENGTH(th) ")
 
     for word in cur.fetchall():
         result.append(
