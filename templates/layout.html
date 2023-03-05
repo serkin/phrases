@@ -1,30 +1,33 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css"
-    integrity="sha512-n//BDM4vMPvyca4bJjZPDh7hlqsQ7hqbP9RH18GF2hTXBY5amBwM2501M0GPiwCU/v9Tor2m13GOTFjk00tkQA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-<style>
-    .container {
-        margin: 10px;
-    }
-</style>
-<div class="ui container">
-    <div class="ui grid">
-        <div class="sixteen wide column">
-            <p><a href="{{ url_for('home') }}">Home</a></p>
-            {% block content %}
+<!DOCTYPE html>
+<html>
 
-            {% endblock %}
-            <p></p>
-            <div class="ui compact menu">
-                {% if word and word.id %}
-                <a class="item" class="ui teal button" href="{{ url_for('words.word.edit', word_id=word.id) }}">Edit</a>
-                {% endif %}
-                <a class="item" class="ui teal button" href="{{ url_for('words.create') }}">Create</a>
-                <div class="item">Failes - {{ stat.fail }}</div>
-                <div class="item">Success - {{ stat.success }}</div>
-                <a class="item" href="{{ url_for('words.index') }}">Todays Words</a>
-                <a class="item" href="{{ url_for('words.index', show_all_words=1) }}">All Words</a>
-                <a class="item" href="{{ url_for('dialogs.index') }}">Dialogs</a>
-            </div>
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css"
+        integrity="sha512-n//BDM4vMPvyca4bJjZPDh7hlqsQ7hqbP9RH18GF2hTXBY5amBwM2501M0GPiwCU/v9Tor2m13GOTFjk00tkQA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="main ui container">
+        {% block content %}
+
+        {% endblock %}
+        <div>&nbsp;</div>
+        <div class="ui compact menu">
+            <a class="item" href="{{ url_for('home') }}"><i class="home icon"></i></a>
+            {% if word and word.id %}
+            <a class="item ui teal button" href="{{ url_for('words.word.edit', word_id=word.id) }}"><i class="edit icon"></i></a>
+            {% endif %}
+            <a class="item ui teal button" href="{{ url_for('words.create') }}"><i class="plus icon"></i></a>
+            <!-- <a class="item" href="{{ url_for('words.index') }}">Todays Words</a> -->
+            <a class="item" href="{{ url_for('words.index', show_all_words=1) }}"><i class="list icon"></i></a>
+            <a class="item" href="{{ url_for('dialogs.index') }}"><i class="handshake icon"></i></a>
         </div>
     </div>
-</div>
+</body>
+
+</html>

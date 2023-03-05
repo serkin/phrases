@@ -1,8 +1,6 @@
 from flask import render_template
 from flask import Blueprint, g
 
-from utils import _stat
-
 
 bp = Blueprint('dialogs', __name__, url_prefix='/dialogs')
 
@@ -13,7 +11,7 @@ def index():
     cur.execute("SELECT * FROM dialogs;")
     dialogs = cur.fetchall()
     cur.close()
-    return render_template("dialogs/index.html", stat=_stat(), dialogs=dialogs)
+    return render_template("dialogs/index.html", dialogs=dialogs)
 
 
 @bp.route("/<dialog_id>")
@@ -35,4 +33,4 @@ dialogs.id = %s
 ORDER BY dialog_words.id;""", (dialog_id))
     dialog_words = cur.fetchall()
     cur.close()
-    return render_template("dialog.html", stat=_stat(), dialog=_dialog, dialog_words=dialog_words)
+    return render_template("dialog.html", dialog=_dialog, dialog_words=dialog_words)

@@ -1,7 +1,6 @@
 from collections import defaultdict
 from flask import redirect, render_template, request, Blueprint, g, url_for
 
-from utils import _stat
 from ..words import word as word_bp
 
 bp = Blueprint('words', __name__, url_prefix='/words')
@@ -18,7 +17,7 @@ def create():
 
         cur.close()
         return redirect(url_for("words.word", word_id=cur.lastrowid))
-    return render_template("words/form.html", stat=_stat())
+    return render_template("words/form.html")
 
 
 @bp.route("/<word_id>", methods=['POST', 'GET'])
@@ -49,12 +48,13 @@ WHERE
             user_result = "success"
         else:
             user_result = "fail"
-    if user_answer and not form.get('second_attempt'):
+
+        # and not form.get('second_attempt'):
         cur.execute("""INSERT INTO log (word_id, status, answer) values(%s, %s, %s);""",
-                    (form.get('word_id'), user_result, user_answer))
+                    (word_id, user_result, user_answer))
         g.mysql.connection.commit()
     cur.close()
-    return render_template("words/word.html", word=word, stat=_stat(), children=children, user_answer=user_answer, user_result=user_result)
+    return render_template("words/word.html", word=word, children=children, user_answer=user_answer, user_result=user_result)
 
 
 @bp.route("")
@@ -84,7 +84,7 @@ is_active desc, base;""")
             th=word["th"], base=word["base"], fail=0, success=0, is_active=word["is_active"])
         words[word["id"]][word["status"]] = word["total"]
     cur.close()
-    return render_template("words/index.html", stat=_stat(), words=words)
+    return render_template("words/index.html", words=words)
 
 
 bp.register_blueprint(word_bp.bp)

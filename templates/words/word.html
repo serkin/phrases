@@ -11,12 +11,11 @@
 
 {% if not user_answer or word.th != user_answer %}
 <form action="{{ url_for('words.word', word_id=word.id) }}" method="post" autocomplete="off" class="ui form">
-    <input type="hidden" name="word_id" value="{{ word.id }}">
     {% if result == "fail" %}
     <input type="hidden" name="second_attempt" value=1>
 
     {% endif %}
-    <input name="user_answer" style="width: 100%; height: 36px;">
+    <input name="user_answer" style="width: 100%; height: 36px;" required>
     <br /><br />
     <button type="submit" style="width: 100%; height: 36px;" class="ui teal button">Check</button>
 </form>
@@ -50,6 +49,7 @@
     });
 </script>
 
+<div>&nbsp;</div>
 
 <div class="ui styled accordion">
     <div class="title">
@@ -82,10 +82,10 @@
     <div class="content">
         <p>
         <form class="ui form" action="{{ url_for('words.word.bind', word_id=word.id) }}" method="post">
-            <div class="inline field">
+            <div class="inline required field">
                 <label>Слово</label>
                 <div>
-                    <select class="ui fluid search dropdown" name="word_id">
+                    <select class="ui fluid search dropdown" name="word_id" required>
                     </select>
                 </div>
             </div>

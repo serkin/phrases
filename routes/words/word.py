@@ -1,8 +1,6 @@
 from flask import redirect, render_template, request, url_for
 from flask import Blueprint, g
 
-from utils import _stat
-
 
 bp = Blueprint('word', __name__, url_prefix='/<word_id>')
 
@@ -23,7 +21,7 @@ def edit(word_id):
         cur.execute("SELECT * FROM words WHERE id = %s LIMIT 1;", (word_id,))
         rv = cur.fetchall()
         word = rv[0]
-        return render_template("words/form.html", stat=_stat(), word=word)
+        return render_template("words/form.html", word=word)
 
 
 @bp.route("/activate")
