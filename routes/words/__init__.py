@@ -50,8 +50,7 @@ WHERE
             user_result = "fail"
 
         # and not form.get('second_attempt'):
-        cur.execute("""INSERT INTO log (word_id, status, answer) values(%s, %s, %s);""",
-                    (word_id, user_result, user_answer))
+        cur.execute("UPDATE words SET answered_at = now() WHERE id = %s", (word_id,))
         g.mysql.connection.commit()
     cur.close()
     return render_template("words/word.html", word=word, children=children, user_answer=user_answer, user_result=user_result)
@@ -63,26 +62,17 @@ def index():
     show_all_words = request.args.get('show_all_words')
     cur.execute(f"""
 SELECT
-words.id,
-base,
-th,
-is_active,
-log.status,
-COUNT(*) as total
+    id,
+    base,
+    th,
+    is_active
 FROM
-words
-LEFT JOIN log ON words.id = log.word_id
+    words
 WHERE
-words.hidden_at IS NULL {"AND DATE(log.timestamp) = CURDATE()" if not show_all_words else ""}
-GROUP BY
-log.status, base, words.id, th, is_active
+    hidden_at IS NULL {"AND DATE(answered_at) = CURDATE()" if not show_all_words else ""}
 ORDER BY
-is_active desc, base;""")
-    words = defaultdict(dict)
-    for word in cur.fetchall():
-        words[word["id"]] = dict(
-            th=word["th"], base=word["base"], fail=0, success=0, is_active=word["is_active"])
-        words[word["id"]][word["status"]] = word["total"]
+    is_active desc, base;""")
+    words = cur.fetchall()
     cur.close()
     return render_template("words/index.html", words=words)
 

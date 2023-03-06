@@ -7,20 +7,15 @@
         <tr>
             <th>Слово</th>
             <th>th</th>
-            <th>Fail</th>
-            <th>Success</th>
             <th>Active</th>
             <th>Manage</th>
         </tr>
     </thead>
     <tbody>
-        {% for word_id, word in words.items() %}
-        <tr
-            class="{% if word.is_active and word.success %}{% if word.success >= word.fail %}positive{% else %}negative{% endif %}{% endif %}">
-            <td><a href="{{ url_for('words.word', word_id=word_id) }}">{{ word.base }}</a></td>
+        {% for word in words %}
+        <tr>
+            <td><a href="{{ url_for('words.word', word_id=word.id) }}">{{ word.base }}</a></td>
             <td><span class="ui big text">{{ word.th }}</span></td>
-            <td>{{ word.fail or 0 }}</td>
-            <td>{{ word.success or 0 }}</td>
             <td>{{ word.is_active }}</td>
             <td>{% if word.is_active %}
                 <a href="{{ url_for('words.word.deactivate', word_id=word_id)}}" class="ui tiny red button">deactivate</a>
