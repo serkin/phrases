@@ -14,7 +14,7 @@ def index():
     return render_template("dialogs/index.html", dialogs=dialogs)
 
 
-@bp.route("/<dialog_id>")
+@bp.route("/<dialog_id>", methods=['POST', 'GET'])
 def dialog(dialog_id):
     cur = g.mysql.connection.cursor()
     cur.execute("SELECT * FROM dialogs where id = %s;", (dialog_id))
@@ -33,4 +33,4 @@ dialogs.id = %s
 ORDER BY dialog_words.id;""", (dialog_id))
     dialog_words = cur.fetchall()
     cur.close()
-    return render_template("dialog.html", dialog=_dialog, dialog_words=dialog_words)
+    return render_template("dialogs/dialog.html", dialog=_dialog, dialog_words=dialog_words)

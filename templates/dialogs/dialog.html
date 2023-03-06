@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<form class="ui form">
+<form class="ui form" action="{{ url_for('dialogs.dialog', dialog_id=dialog.id) }}" method="post" >
     <table class="ui compact celled table">
         <thead>
             <tr>
@@ -16,11 +16,7 @@
                 <td>{{ dialog_word.dialog_person_name }}</td>
                 <td>{{ dialog_word.base }}</td>
                 <td>
-                    <input type="hidden" name="base.{{ dialog_word.dialog_word_id }}"
-                        value="{{ dialog_word.dialog_word_id }}">
-                </td>
-                <td>
-                    <input type="text" name="th.{{ dialog_word.dialog_word_id }}" value="">
+                    <input type="text" name="{{ dialog_word.word_id }}">
                 </td>
             </tr>
             {% endfor %}
