@@ -15,7 +15,7 @@ def words():
         result.append(
             {
                 "value": str(word["id"]),
-                "name": word["base"] + " - " + word["th"]
+                "name": word["base"] + f" - {word['th']}" if word['th'] else ''
             }
         )
 

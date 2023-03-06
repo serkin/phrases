@@ -18,9 +18,9 @@
             <td><span class="ui big text">{{ word.th }}</span></td>
             <td>{{ word.is_active }}</td>
             <td>{% if word.is_active %}
-                <a href="{{ url_for('words.word.deactivate', word_id=word_id)}}" class="ui tiny red button">deactivate</a>
+                <a href="{{ url_for('words.word.deactivate', word_id=word.id)}}" class="ui tiny red button">deactivate</a>
                 {% else %}
-                <a href="{{ url_for('words.word.activate', word_id=word_id)}}" class="ui primary button">activate</a>
+                <a href="{{ url_for('words.word.activate', word_id=word.id)}}" class="ui primary button">activate</a>
                 {% endif %}
             </td>
         </tr>
