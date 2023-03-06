@@ -12,7 +12,7 @@ def create():
         form = request.form
         cur = g.mysql.connection.cursor()
         cur.execute("INSERT INTO words (base, th, spelling,comment ) VALUES(%s, %s, %s, %s)",
-                    (form.get("base"), form.get("th"), form.get("spelling"), form.get("comment")))
+                    (form.get("base"), form.get("th") or None, form.get("spelling") or None, form.get("comment") or None))
         g.mysql.connection.commit()
 
         cur.close()

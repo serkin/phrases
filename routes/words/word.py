@@ -12,7 +12,7 @@ def edit(word_id):
         cur = g.mysql.connection.cursor()
 
         cur.execute(
-            """UPDATE words SET base = %s, th =%s, spelling = %s, comment = %s WHERE id = %s;""", (form.get("base"), form.get("th"), form.get("spelling"), form.get("comment"), word_id))
+            """UPDATE words SET base = %s, th =%s, spelling = %s, comment = %s WHERE id = %s;""", (form.get("base"), form.get("th") or None, form.get("spelling") or None, form.get("comment") or None, word_id))
         g.mysql.connection.commit()
         cur.close()
         return redirect(url_for("words.word", word_id=word_id))

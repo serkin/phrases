@@ -11,15 +11,15 @@
     </div>
     <div class="field">
         <label>th</label>
-        <input type="text" name="th" value="{% if word %}{{ word.th }}{% endif %}">
+        <input type="text" name="th" value="{% if word %}{{ word.th or '' }}{% endif %}">
     </div>
     <div class="field">
         <label>Spelling</label>
-        <textarea name="spelling">{% if word %}{{ word.spelling }}{% endif %}</textarea>
+        <textarea name="spelling">{% if word %}{{ word.spelling or '' }}{% endif %}</textarea>
     </div>
     <div class="field">
         <label>Comment</label>
-        <textarea name="comment">{% if word %}{{ word.comment }}{% endif %}</textarea>
+        <textarea name="comment">{% if word %}{{ word.comment or '' }}{% endif %}</textarea>
     </div>
     <button class="ui button" type="submit">Save</button>
 </form>
