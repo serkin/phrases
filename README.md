@@ -11,6 +11,8 @@
 - Добавлять слова в диалоги
 - Тесты
 - Бекапы базы данных
+- Отображать disabled - http://159.69.208.209:8080/words?show_all_words=1
+
 
 
 This app helps me to learn Thai

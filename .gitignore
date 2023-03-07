@@ -127,5 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-export.txt
+vocabulary.txt
 *.apkg
+dialog.txt
