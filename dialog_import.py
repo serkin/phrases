@@ -54,7 +54,7 @@ with open("dialog.txt") as file:
 
     for line in lines:
         user_name = line.split(':')[0]
-        base, th, spelling = line.split(':')[1].split('/')
+        th, base, spelling = line.split(':')[1].split('/')
         word_id = _save_word(base, th, spelling)
         cursor.execute(
             "INSERT INTO dialog_words (dialog_id, dialog_person_id, word_id) VALUES(%s, %s, %s)", (dialog_id, users[user_name], word_id))

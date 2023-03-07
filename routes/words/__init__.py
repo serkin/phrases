@@ -1,4 +1,3 @@
-from collections import defaultdict
 from flask import redirect, render_template, request, Blueprint, g, url_for
 
 from ..words import word as word_bp
@@ -59,8 +58,7 @@ WHERE
 @bp.route("")
 def index():
     cur = g.mysql.connection.cursor()
-    show_all_words = request.args.get('show_all_words')
-    cur.execute(f"""
+    cur.execute("""
 SELECT
     id,
     base,
@@ -69,7 +67,7 @@ SELECT
 FROM
     words
 WHERE
-    hidden_at IS NULL {"AND DATE(answered_at) = CURDATE()" if not show_all_words else ""}
+    hidden_at IS NULL
 ORDER BY
     is_active desc, base;""")
     words = cur.fetchall()

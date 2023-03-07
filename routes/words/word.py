@@ -58,7 +58,7 @@ def deactivate(word_id):
         """UPDATE words SET is_active = 0 WHERE id = %s;""", (word_id,))
     g.mysql.connection.commit()
     cur.close()
-    return redirect(url_for("words.index", show_all_words=1))
+    return redirect(url_for("words.index"))
 
 
 @bp.route("/hide")
