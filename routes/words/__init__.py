@@ -41,6 +41,18 @@ WHERE
     word_id = %s;""", (word_id,))
     children = cur.fetchall()
 
+    cur.execute("""
+SELECT
+    words.base,
+    words.th,
+    words.id
+FROM
+    words_composition
+LEFT JOIN words ON words_composition.word_id = words.id
+WHERE
+    word_id = %s;""", (word_id,))
+    parents = cur.fetchall()
+
     # Handling User Response
     if user_answer:
         if word["th"] == user_answer:
@@ -49,10 +61,11 @@ WHERE
             user_result = "fail"
 
         # and not form.get('second_attempt'):
-        cur.execute("UPDATE words SET answered_at = now() WHERE id = %s", (word_id,))
+        cur.execute(
+            "UPDATE words SET answered_at = now() WHERE id = %s", (word_id,))
         g.mysql.connection.commit()
     cur.close()
-    return render_template("words/word.html", word=word, children=children, user_answer=user_answer, user_result=user_result)
+    return render_template("words/word.html", word=word, parents=parents, children=children, user_answer=user_answer, user_result=user_result)
 
 
 @bp.route("")
