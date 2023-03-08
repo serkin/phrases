@@ -67,8 +67,8 @@
         <table class="ui celled table">
             {% for el in children %}
             <tr>
-                <td>{{ el["base"] }}</td>
-                <td>{{ el["th"] }}</td>
+                <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.base }}</a></td>
+                <td>{{ el.th }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -84,8 +84,8 @@
         <table class="ui celled table">
             {% for el in parents %}
             <tr>
-                <td>{{ el["base"] }}</td>
-                <td>{{ el["th"] }}</td>
+                <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.base }}</a></td>
+                <td>{{ el.th }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -110,6 +110,8 @@
         </p>
     </div>
 </div>
+
+<div>&nbsp;</div>
 
 <td>{% if word.is_active %}
     <a href="{{ url_for('words.word.deactivate', word_id=word.id)}}" class="ui tiny red button">deactivate</a>

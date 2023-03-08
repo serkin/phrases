@@ -6,12 +6,13 @@ cnx = mysql.connector.connect(user='root',
 
 mycursor = cnx.cursor()
 
-with open("vocabulary.txt") as file:
+text = """"""
 
-    for line in file.readlines():
-        th, spelling, base, comment = line.split("/")
-        mycursor.execute("INSERT IGNORE INTO words (th, spelling, base, comment) VALUES (%s, %s, %s, %s);", (th, spelling, base, comment))
-        cnx.commit()
+for line in text.readlines():
+    th, spelling, base, comment = line.split("/")
+    mycursor.execute(
+        "INSERT IGNORE INTO words (th, spelling, base, comment) VALUES (%s, %s, %s, %s);", (th, spelling, base, comment))
+    cnx.commit()
 
 mycursor.close()
 cnx.close()

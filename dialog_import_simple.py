@@ -7,6 +7,16 @@ cnx = mysql.connector.connect(user='root',
 cursor = cnx.cursor()
 
 
+def _get_word_id(word: str) -> id or None:
+
+    cursor.execute(
+        "SELECT id FROM words WHERE base = %s LIMIT 1;", (word,))
+    rv = cursor.fetchall()
+    if rv:
+        return rv[0][0]
+    return None
+
+
 def _get_users(lines: list) -> dict:
     users = set()
     result = {}
@@ -29,34 +39,49 @@ def _get_users(lines: list) -> dict:
     return result
 
 
-def _save_word(base: str, th: str, spelling: str = None, comment: str = None) -> int:
-    cursor.execute(
-        "SELECT id FROM words WHERE base = %s and th = %s LIMIT 1;", (base, th))
-    rv = cursor.fetchall()
-    if rv:
-        return rv[0][0]
-
-    cursor.execute(
-        "INSERT INTO words (base, th, spelling, comment) VALUES(%s, %s, %s, %s)", (base, th, spelling, comment))
-    cnx.commit()
-    return cursor.lastrowid
-
-# def save_dialog_word(base: str, th: str, spelling: str = None, comment: str = None) -> int:
-
-
-text = """"""
+text = """
+Tom:Hello
+Pan:Hello
+Tom:I'm Tom
+Pan:Nice to meet you
+Pan:I'm Pan
+Tom:How are you doing?
+Pan:I'm fine
+Pan:Where are you from?
+Tom:I'm from Kenya
+Tom:How old are you?
+Pan:I'm 28 years old.
+Pan:Where do you live?
+Tom:I live in a hotel
+Tom:What are you doing?
+Pan:I'm watching TV
+Pan:Do you want to meet?
+Tom:Yes"""
 
 
 lines = text.splitlines()
+
+# Check all words present in db
+check_result = ""
+for line in lines[1:]:
+    word = line.split(':')[1]
+    word_id = _get_word_id(word)
+    if not word_id:
+        check_result += f"{word} - missing\r\n"
+
+if len(check_result) > 1:
+    print(check_result)
+    exit(0)
+
 users = _get_users(lines)
 cursor.execute("INSERT INTO dialogs (description) VALUES('New dialog')")
 cnx.commit()
 dialog_id = cursor.lastrowid
 
-for line in lines:
+for line in lines[1:]:
     user_name = line.split(':')[0]
-    th, base, spelling = line.split(':')[1].split('/')
-    word_id = _save_word(base, th, spelling)
+    word = line.split(':')[1]
+    word_id = _get_word_id(word)
     cursor.execute(
         "INSERT INTO dialog_words (dialog_id, dialog_person_id, word_id) VALUES(%s, %s, %s)", (dialog_id, users[user_name], word_id))
     cnx.commit()
