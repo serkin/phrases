@@ -42,15 +42,15 @@ def _get_users(lines: list) -> dict:
 text = """
 Tom:Hello
 Pan:Hello
-Tom:I'm Tom
+Tom:My name is Tom
 Pan:Nice to meet you
 Pan:I'm Pan
-Tom:How are you doing?
+Tom:How are you?
 Pan:I'm fine
 Pan:Where are you from?
 Tom:I'm from Kenya
 Tom:How old are you?
-Pan:I'm 28 years old.
+Pan:I'm 88 years old
 Pan:Where do you live?
 Tom:I live in a hotel
 Tom:What are you doing?

@@ -48,7 +48,7 @@ SELECT
     words.id
 FROM
     words_composition
-LEFT JOIN words ON words_composition.child_word_id = words.id
+LEFT JOIN words ON words_composition.word_id = words.id
 WHERE
     child_word_id = %s;""", (word_id,))
     parents = cur.fetchall()
