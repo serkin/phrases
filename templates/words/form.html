@@ -17,10 +17,11 @@
         <label>Spelling</label>
         <textarea name="spelling">{% if word %}{{ word.spelling or '' }}{% endif %}</textarea>
     </div>
+    <button class="ui teal button" type="submit">Save</button>
     <div class="field">
         <label>Comment</label>
         <textarea name="comment">{% if word %}{{ word.comment or '' }}{% endif %}</textarea>
     </div>
-    <button class="ui button" type="submit">Save</button>
+    <button class="ui teal button" type="submit">Save</button>
 </form>
 {% endblock %}

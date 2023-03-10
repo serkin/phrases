@@ -92,6 +92,18 @@
         </p>
     </div>
     {% endif %}
+
+
+    {% if word.comment %}
+    <div class="title">
+        <i class="dropdown icon"></i>Комментарий
+    </div>
+    <div class="content">
+        <p>
+            {{ word.comment }}
+        </p>
+    </div>
+    {% endif %}
     <div class="title">
         <i class="dropdown icon"></i>Добавить слово
     </div>
