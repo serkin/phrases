@@ -17,6 +17,8 @@
         <div class="ui compact menu">
             <a class="item" href="{{ url_for('home') }}"><i class="home icon"></i></a>
             {% if word and word.id %}
+            <a class="item" href="{{ url_for('words.word', word_id=word.id) }}"><i
+                class="redo icon"></i></a>
             <a class="item" href="{{ url_for('words.word.edit', word_id=word.id) }}"><i
                     class="edit icon"></i></a>
             <a class="item" target="_blank" href="https://translate.google.ru/?sl=th&tl=en&text={{ word.th }}"><i class="google icon"></i></a>
