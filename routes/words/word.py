@@ -50,6 +50,21 @@ def bind(word_id):
     return redirect(url_for("words.word", word_id=word_id))
 
 
+@bp.route("/unbind")
+def unbind(word_id):
+    form = request.args
+    cur = g.mysql.connection.cursor()
+    try:
+        cur.execute("DELETE FROM words_composition WHERE word_id = %s and child_word_id = %s;",
+                    (word_id, form.get("child_word_id")))
+        g.mysql.connection.commit()
+    except:
+        pass
+    finally:
+        cur.close()
+    return redirect(url_for("words.word", word_id=word_id))
+
+
 @bp.route("/deactivate")
 def deactivate(word_id):
     cur = g.mysql.connection.cursor()

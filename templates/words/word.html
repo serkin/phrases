@@ -69,6 +69,7 @@
             <tr>
                 <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.base }}</a></td>
                 <td>{{ el.th }}</td>
+                <td><a href="{{ url_for('words.word.unbind', word_id=word.id, child_word_id=el.id)}}" class="ui tiny button">Отвязать</a></td>
             </tr>
             {% endfor %}
         </table>

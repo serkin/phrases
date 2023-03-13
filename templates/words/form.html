@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<div>&nbsp;</div>
 
 <form class="ui form"
     action="{% if word %}{{ url_for('words.word.edit', word_id=word.id) }}{% else %}{{ url_for('words.create') }}{% endif %}"
