@@ -12,13 +12,23 @@
     </div>
     <div class="field">
         <label>th</label>
-        <input type="text" name="th" value="{% if word %}{{ word.th or '' }}{% endif %}">
+        <input type="text" name="th" value="{% if word %}{{ word.th or '' }}{% endif %}" autofocus>
     </div>
     <div class="field">
         <label>Spelling</label>
         <textarea name="spelling">{% if word %}{{ word.spelling or '' }}{% endif %}</textarea>
     </div>
     <button class="ui teal button" type="submit">Save</button>
+    <div class="field">
+        <label>Category</label>
+        <select name="category">
+            <option value=""></option>
+            {% for category in ['vowels', 'consonants', 'colors', 'numbers'] %}
+            <option value="{{ category }}" {% if word and word.category==category %} selected{% endif %}>{{ category }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
     <div class="field">
         <label>Comment</label>
         <textarea name="comment">{% if word %}{{ word.comment or '' }}{% endif %}</textarea>

@@ -76,6 +76,7 @@ SELECT
     id,
     base,
     th,
+    category,
     is_active
 FROM
     words

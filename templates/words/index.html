@@ -8,6 +8,7 @@
             <th>Слово</th>
             <th>th</th>
             <th>Translation</th>
+            <th>Category</th>
             <th>Manage</th>
         </tr>
     </thead>
@@ -17,6 +18,7 @@
             <td><a href="{{ url_for('words.word', word_id=word.id) }}">{{ word.base }}</a></td>
             <td><span class="ui big text">{{ word.th }}</span></td>
             <td><a target="_blank" href="https://translate.google.ru/?sl=th&tl=en&text={{ word.th }}"><i class="google icon"></i></a></td>
+            <td>{{ word.category or '' }}</td>
             <td>{% if word.is_active %}
                 <a href="{{ url_for('words.word.deactivate', word_id=word.id)}}" class="ui tiny red button">deactivate</a>
                 {% else %}
