@@ -3,4 +3,6 @@ mysqlclient
 gunicorn
 mysql-connector-python
 anki-export
-blinker==1.4
+blinker
+Flask-Session
+Flask-SQLAlchemy
