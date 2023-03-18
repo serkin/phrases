@@ -1,6 +1,7 @@
-from flask import redirect, render_template, request, Blueprint, g, url_for
+from datetime import datetime
+from flask import redirect, render_template, request, Blueprint, url_for
 
-from models import Word
+from models import Word, WordsComposition
 
 from ..words import word as word_bp
 from db import db
@@ -11,13 +12,18 @@ bp = Blueprint('words', __name__, url_prefix='/words')
 def create():
     if request.method == "POST":
         form = request.form
-        cur = g.mysql.connection.cursor()
-        cur.execute("INSERT INTO words (base, th, spelling,comment ) VALUES(%s, %s, %s, %s)",
-                    (form.get("base"), form.get("th") or None, form.get("spelling") or None, form.get("comment") or None))
-        g.mysql.connection.commit()
 
-        cur.close()
-        return redirect(url_for("words.word", word_id=cur.lastrowid))
+        word = Word()
+        word.base = form.get("base")
+        word.comment = form.get("comment") or None
+        word.spelling = form.get("spelling") or None
+        word.th = form.get("th") or None
+        word.category = form.get("category") or None
+
+        db.session.add(word)
+        db.session.commit()
+
+        return redirect(url_for("words.word", word_id=word.id))
     return render_template("words/form.html")
 
 
@@ -29,64 +35,39 @@ def word(word_id):
 
     word = db.session.query(Word).filter(Word.id == word_id).first()
 
-#     cur.execute("""
-# SELECT
-#     words.base,
-#     words.th,
-#     words.id
-# FROM
-#     words_composition
-# LEFT JOIN words ON words_composition.child_word_id = words.id
-# WHERE
-#     word_id = %s;""", (word_id,))
-    children = []
+    query = db.session.query(Word.base, Word.th, Word.id) \
+        .select_from(WordsComposition) \
+        .join(Word, WordsComposition.child_word_id == Word.id) \
+        .filter(WordsComposition.word_id == word_id) \
+        .order_by(WordsComposition.id)
 
-#     cur.execute("""
-# SELECT
-#     words.base,
-#     words.th,
-#     words.id
-# FROM
-#     words_composition
-# LEFT JOIN words ON words_composition.word_id = words.id
-# WHERE
-#     child_word_id = %s;""", (word_id,))
-    parents = []
+    children = query.all()
 
-#     # Handling User Response
-#     if user_answer:
-#         if word["th"] == user_answer:
-#             user_result = "success"
-#         else:
-#             user_result = "fail"
+    query = db.session.query(Word.base, Word.th, Word.id) \
+        .select_from(WordsComposition) \
+        .join(Word, WordsComposition.word_id == Word.id) \
+        .filter(WordsComposition.child_word_id == word_id) \
+        .order_by(WordsComposition.id)
 
-#         # and not form.get('second_attempt'):
-#         cur.execute(
-#             "UPDATE words SET answered_at = now() WHERE id = %s", (word_id,))
-#         g.mysql.connection.commit()
-#     cur.close()
+    parents = query.all()
+
+    # Handling User Response
+    if user_answer:
+        if word.th == user_answer:
+            user_result = "success"
+        else:
+            user_result = "fail"
+
+        word.answered_at = datetime.now()
+        db.session.commit()
     return render_template("words/word.html", word=word, parents=parents, children=children, user_answer=user_answer, user_result=user_result)
 
 
 @bp.route("")
 def index():
-    cur = g.mysql.connection.cursor()
-    cur.execute("""
-SELECT
-    id,
-    base,
-    th,
-    category,
-    is_active
-FROM
-    words
-WHERE
-    hidden_at IS NULL
-ORDER BY
-    is_active desc, base;""")
-    words = cur.fetchall()
-    cur.close()
-    return render_template("words/index.html", words=words)
+    query = db.session.query(Word).filter(Word.hidden_at.is_(
+        None)).order_by(Word.is_active.desc(), Word.base)
+    return render_template("words/index.html", words=query.all())
 
 
 bp.register_blueprint(word_bp.bp)

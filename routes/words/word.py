@@ -1,87 +1,68 @@
+from datetime import datetime
 from flask import redirect, render_template, request, url_for
-from flask import Blueprint, g
-
+from flask import Blueprint
+from sqlalchemy import delete
+from models import Word, WordsComposition
+from db import db
 
 bp = Blueprint('word', __name__, url_prefix='/<word_id>')
 
 
 @bp.route("/edit", methods=['POST', 'GET'])
 def edit(word_id):
+    word = db.session.query(Word).get_or_404(word_id)
     if request.method == "POST":
         form = request.form
-        cur = g.mysql.connection.cursor()
 
-        cur.execute(
-            """UPDATE words SET base = %s, th =%s, spelling = %s, comment = %s, category = %s WHERE id = %s;""", (form.get("base"), form.get("th") or None, form.get("spelling") or None, form.get("comment") or None, form.get("category") or None, word_id))
-        g.mysql.connection.commit()
-        cur.close()
+        word.base = form.get("base")
+        word.comment = form.get("comment") or None
+        word.spelling = form.get("spelling") or None
+        word.th = form.get("th") or None
+        word.category = form.get("category") or None
+        db.session.commit()
+
         return redirect(url_for("words.word", word_id=word_id))
+
     if request.method == "GET":
-        cur = g.mysql.connection.cursor()
-        cur.execute("SELECT * FROM words WHERE id = %s LIMIT 1;", (word_id,))
-        rv = cur.fetchall()
-        word = rv[0]
         return render_template("words/form.html", word=word)
 
 
 @bp.route("/activate")
 def activate(word_id):
-    cur = g.mysql.connection.cursor()
-
-    cur.execute(
-        """UPDATE words SET is_active = 1 WHERE id = %s;""", (word_id,))
-    g.mysql.connection.commit()
-    cur.close()
-    return redirect(url_for("words.index"))
+    word = db.session.query(Word).get_or_404(word_id)
+    word.is_active = 1
+    db.session.commit()
+    return redirect(url_for("words.index", word_id=word_id))
 
 
 @bp.route("/bind", methods=['POST'])
 def bind(word_id):
     form = request.form
-    cur = g.mysql.connection.cursor()
-    try:
-        cur.execute("INSERT INTO words_composition (word_id, child_word_id) VALUES(%s, %s)",
-                    (word_id, form.get("word_id")))
-        g.mysql.connection.commit()
-    except:
-        pass
-    finally:
-        cur.close()
+    words_composition = WordsComposition(word_id=word_id, child_word_id=form.get("word_id"))
+    db.session.add(words_composition)
+    db.session.commit()
     return redirect(url_for("words.word", word_id=word_id))
 
 
 @bp.route("/unbind")
 def unbind(word_id):
     form = request.args
-    cur = g.mysql.connection.cursor()
-    try:
-        cur.execute("DELETE FROM words_composition WHERE word_id = %s and child_word_id = %s;",
-                    (word_id, form.get("child_word_id")))
-        g.mysql.connection.commit()
-    except:
-        pass
-    finally:
-        cur.close()
+    db.session.execute(delete(WordsComposition).where(WordsComposition.word_id == word_id, WordsComposition.child_word_id == form.get("child_word_id")))
+    db.session.commit()
     return redirect(url_for("words.word", word_id=word_id))
 
 
 @bp.route("/deactivate")
 def deactivate(word_id):
-    cur = g.mysql.connection.cursor()
-
-    cur.execute(
-        """UPDATE words SET is_active = 0 WHERE id = %s;""", (word_id,))
-    g.mysql.connection.commit()
-    cur.close()
+    word = db.session.query(Word).get_or_404(word_id)
+    word.is_active = 0
+    db.session.commit()
     return redirect(url_for("words.word", word_id=word_id))
 
 
 @bp.route("/hide")
 def never(word_id):
-    cur = g.mysql.connection.cursor()
-
-    cur.execute(
-        """UPDATE words SET hidden_at = current_timestamp WHERE id = %s;""", (word_id,))
-    g.mysql.connection.commit()
-    cur.close()
+    word = db.session.query(Word).get_or_404(word_id)
+    word.hidden_at = datetime.now()
+    db.session.commit()
     return redirect(url_for("home"))

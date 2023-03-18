@@ -31,6 +31,8 @@ def create_app():
     def home():
         if request.args.get('category'):
             session['category'] = request.args.get('category')
+        if request.args.get('all'):
+            del session['category']
         query = db.session.query(Word).filter(
             Word.hidden_at.is_(None), Word.is_active == 1)
 

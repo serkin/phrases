@@ -30,9 +30,9 @@
                 More
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <a class="item" href="{{ url_for('home', category='numbers') }}"><i class="home icon"></i> Numbers</a>
-                    <a class="item"><i class="globe icon"></i> Choose Language</a>
-                    <a class="item"><i class="settings icon"></i> Account Settings</a>
+                    <a class="item" href="{{ url_for('home', all=1) }}"><i class="home icon"></i> All</a>
+                    <a class="item" href="{{ url_for('home', category='numbers') }}"><i class="file icon"></i> Numbers</a>
+                    <a class="item" href="{{ url_for('home', category='colors') }}"><i class="adjust icon"></i> Colors</a>
                 </div>
             </div>
         </div>
