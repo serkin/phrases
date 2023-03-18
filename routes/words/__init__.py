@@ -1,7 +1,9 @@
 from flask import redirect, render_template, request, Blueprint, g, url_for
 
-from ..words import word as word_bp
+from models import Word
 
+from ..words import word as word_bp
+from db import db
 bp = Blueprint('words', __name__, url_prefix='/words')
 
 
@@ -24,47 +26,45 @@ def word(word_id):
     user_result = None
     form = request.form
     user_answer = form.get('user_answer')
-    cur = g.mysql.connection.cursor()
-    cur.execute("SELECT * FROM words WHERE id = %s LIMIT 1;", (word_id,))
-    rv = cur.fetchall()
-    word = rv[0]
 
-    cur.execute("""
-SELECT
-    words.base,
-    words.th,
-    words.id
-FROM
-    words_composition
-LEFT JOIN words ON words_composition.child_word_id = words.id
-WHERE
-    word_id = %s;""", (word_id,))
-    children = cur.fetchall()
+    word = db.session.query(Word).filter(Word.id == word_id).first()
 
-    cur.execute("""
-SELECT
-    words.base,
-    words.th,
-    words.id
-FROM
-    words_composition
-LEFT JOIN words ON words_composition.word_id = words.id
-WHERE
-    child_word_id = %s;""", (word_id,))
-    parents = cur.fetchall()
+#     cur.execute("""
+# SELECT
+#     words.base,
+#     words.th,
+#     words.id
+# FROM
+#     words_composition
+# LEFT JOIN words ON words_composition.child_word_id = words.id
+# WHERE
+#     word_id = %s;""", (word_id,))
+    children = []
 
-    # Handling User Response
-    if user_answer:
-        if word["th"] == user_answer:
-            user_result = "success"
-        else:
-            user_result = "fail"
+#     cur.execute("""
+# SELECT
+#     words.base,
+#     words.th,
+#     words.id
+# FROM
+#     words_composition
+# LEFT JOIN words ON words_composition.word_id = words.id
+# WHERE
+#     child_word_id = %s;""", (word_id,))
+    parents = []
 
-        # and not form.get('second_attempt'):
-        cur.execute(
-            "UPDATE words SET answered_at = now() WHERE id = %s", (word_id,))
-        g.mysql.connection.commit()
-    cur.close()
+#     # Handling User Response
+#     if user_answer:
+#         if word["th"] == user_answer:
+#             user_result = "success"
+#         else:
+#             user_result = "fail"
+
+#         # and not form.get('second_attempt'):
+#         cur.execute(
+#             "UPDATE words SET answered_at = now() WHERE id = %s", (word_id,))
+#         g.mysql.connection.commit()
+#     cur.close()
     return render_template("words/word.html", word=word, parents=parents, children=children, user_answer=user_answer, user_result=user_result)
 
 

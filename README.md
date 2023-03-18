@@ -76,18 +76,9 @@ pip install -r requirements.txt
 
 
 ## Run on server
-```bash
-docker build -f Dockerfile -t phrases .
-docker rm -f phrases || true
-docker run -d --name phrases --link mysql:mysql  -e 'MYSQL_HOST=mysql' -p 8080:5000 --restart always phrases
-```
 
-### Shortcut
 ```bash
-cd ~/phrases && \
-    git pull && \
-    docker build -f Dockerfile -t phrases . && \
-    docker rm -f phrases || true && \
-    docker run -d --name phrases --link mysql:mysql  -e 'MYSQL_HOST=mysql' -p 8080:5000 --restart always phrases
-
+docker build -f Dockerfile -t phrases . && \
+docker rm -f phrases || true && \
+docker run -d --name phrases --link mysql:mysql  -e 'SQLALCHEMY_DATABASE_URI=mysql://root:@mysql/phrases' -p 8080:8081 --restart always phrases
 ```
