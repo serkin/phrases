@@ -18,7 +18,7 @@ def create():
         word.comment = form.get("comment") or None
         word.spelling = form.get("spelling") or None
         word.th = form.get("th") or None
-        word.category = form.get("category") or None
+        word.tags = form.get("tags") or None
 
         db.session.add(word)
         db.session.commit()

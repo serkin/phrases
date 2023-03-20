@@ -1,6 +1,6 @@
 # coding: utf-8
 from sqlalchemy import Column, ForeignKey, Index, Integer, String, TIMESTAMP, Text, text
-from sqlalchemy.dialects.mysql import ENUM, TEXT, TINYINT, VARCHAR
+from sqlalchemy.dialects.mysql import SET, TEXT, TINYINT, VARCHAR, ENUM
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -46,7 +46,7 @@ class Word(Base):
     is_active = Column(TINYINT, nullable=False, server_default=text("'0'"))
     comment = Column(TEXT)
     answered_at = Column(TIMESTAMP)
-    category = Column(ENUM('vowels', 'consonants', 'colors', 'numbers'))
+    tags = Column(SET('vowels', 'consonants', 'colors', 'numbers'))
 
 
 class DialogWord(Base):

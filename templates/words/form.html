@@ -20,11 +20,11 @@
     </div>
     <button class="ui teal button" type="submit">Save</button>
     <div class="field">
-        <label>Category</label>
-        <select name="category">
+        <label>Tags</label>
+        <select name="tags" multiple>
             <option value=""></option>
-            {% for category in ['vowels', 'consonants', 'colors', 'numbers'] %}
-            <option value="{{ category }}" {% if word and word.category==category %} selected{% endif %}>{{ category }}
+            {% for tag in ['vowels', 'consonants', 'colors', 'numbers'] %}
+            <option value="{{ tag }}" {% if word and word.tags and tag in word.tags %} selected{% endif %}>{{ tag }}
             </option>
             {% endfor %}
         </select>

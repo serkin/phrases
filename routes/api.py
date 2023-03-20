@@ -10,8 +10,7 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 @bp.route("/words")
 def words():
     result = []
-    query = db.session.query(Word).order_by(
-        Word.is_active.desc(), Word.base).order_by(func.length(Word.th))
+    query = db.session.query(Word).order_by(func.length(Word.th))
 
     for word in query.all():
         result.append(

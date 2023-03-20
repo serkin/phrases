@@ -18,7 +18,7 @@ def edit(word_id):
         word.comment = form.get("comment") or None
         word.spelling = form.get("spelling") or None
         word.th = form.get("th") or None
-        word.category = form.get("category") or None
+        word.tags = form.getlist("tags") or None
         db.session.commit()
 
         return redirect(url_for("words.word", word_id=word_id))
