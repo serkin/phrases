@@ -15,6 +15,10 @@
         <input type="text" name="th" value="{% if word %}{{ word.th or '' }}{% endif %}" autofocus>
     </div>
     <div class="field">
+        <label>Priority</label>
+        <input type="text" name="priority" value="{% if word %}{{ word.priority or 1 }}{% endif %}" required>
+    </div>
+    <div class="field">
         <label>Spelling</label>
         <textarea name="spelling">{% if word %}{{ word.spelling or '' }}{% endif %}</textarea>
     </div>

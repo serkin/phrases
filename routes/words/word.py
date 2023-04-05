@@ -17,6 +17,7 @@ def edit(word_id):
         word.base = form.get("base")
         word.comment = form.get("comment") or None
         word.spelling = form.get("spelling") or None
+        word.priority = form.get("priority") or 1
         word.th = form.get("th") or None
         word.tags = form.getlist("tags") or None
         db.session.commit()
@@ -32,7 +33,7 @@ def activate(word_id):
     word = db.session.query(Word).get_or_404(word_id)
     word.is_active = 1
     db.session.commit()
-    return redirect(url_for("words.index", word_id=word_id))
+    return redirect(url_for("words.word", word_id=word_id))
 
 
 @bp.route("/bind", methods=['POST'])

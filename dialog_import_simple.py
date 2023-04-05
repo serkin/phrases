@@ -44,19 +44,15 @@ Tom:Hello
 Pan:Hello
 Tom:My name is Tom
 Pan:Nice to meet you
-Pan:I'm Pan
 Tom:How are you?
 Pan:I'm fine
 Pan:Where are you from?
 Tom:I'm from Kenya
-Tom:How old are you?
-Pan:I'm 88 years old
-Pan:Where do you live?
-Tom:I live in a hotel
-Tom:What are you doing?
-Pan:I'm watching TV
-Pan:Do you want to meet?
-Tom:Yes"""
+Pan:How old are you?
+Tom:I'm 38 years old
+Pan:What are you doing?
+Tom:I'm working now
+Tom:What is your Line ID?"""
 
 
 lines = text.splitlines()

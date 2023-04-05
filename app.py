@@ -6,10 +6,6 @@ from routes import words, api, dialogs
 from db import db
 
 app = Flask(__name__)
-# app.config["MYSQL_USER"] = os.getenv('MYSQL_USER', 'root')
-# app.config["MYSQL_DB"] = os.getenv('MYSQL_DB', 'phrases')
-# app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', '0.0.0.0')
-# app.config['MYSQL_HOST'] = os.getenv('SQLALCHEMY_DATABASE_URI', "mysql://root:@127.0.0.1:3306/phrases")
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
     'SQLALCHEMY_DATABASE_URI', "mysql://root:@127.0.0.1:3306/phrases")
 app.secret_key = "AW3[-498WM239D84]"
@@ -29,7 +25,7 @@ def create_app():
         if request.args.get('all'):
             del session['tag']
         query = db.session.query(Word).filter(
-            Word.hidden_at.is_(None), Word.is_active == 1)
+            Word.hidden_at.is_(None), Word.is_active == 1).order_by(Word.answered_at)
 
         if session.get('tag'):
             query = query.filter(Word.tags.in_([session.get('tag')]))

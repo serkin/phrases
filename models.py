@@ -46,6 +46,7 @@ class Word(Base):
     is_active = Column(TINYINT, nullable=False, server_default=text("'0'"))
     comment = Column(TEXT)
     answered_at = Column(TIMESTAMP)
+    priority = Column(TINYINT, nullable=False, server_default=text("'1'"))
     tags = Column(SET('vowels', 'consonants', 'colors', 'numbers'))
 
 

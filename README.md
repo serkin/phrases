@@ -2,13 +2,18 @@
 
 ## Todo
 - **Тесты**
+- **Комментарий открытый**
+- **Отображать транслитерацию в аккордеоне**
+- **Проверка диалога**
+- **Теги сделать SET**
 - Бекапы базы данных
 - Отрезать в конце краб при вставке
-- **Проверка диалога**
 - Диалоги отображать по бокам
+- После ответа сессия слетает
 - Показывать слова попорядку
 - Проверять наличие слова при написании в base
 - Заменить чан на кун при вставке
+- Fix http://159.69.208.209:8081/words/305/edit
 - Количество слов в списке
 - При добавлении слова из диалога или словаря через импорт, если слово уже есть в базе проверять заполнены ли по spelling,comment
 - Слишком длинные слова без разбивки. Или если есть разбивка где то в предложении то остальная разбивка где
@@ -18,8 +23,6 @@
 - Приоритет к словам
 - Правила отдельно с привязкой к словам https://nhn.github.io/tui.editor/latest/tutorial-example01-editor-basic
 - Слова не в диалоге и не привязанные но активные
-- **Комментарий открытый**
-- **Отображать транслитерацию в аккордеоне**
 - Показывать входящие слова с транслитерацией
 - Если слово есть но нет транслитерации то не выбрасывать исключение а заменять транслитерацию
 - Скрипт предложения вариантов вхождения
@@ -29,7 +32,6 @@
 - На странице /words фильтровать слова по категориям
 - На странице / запрашивать слова по категориям
 - Огласовки отдельно
-- **Теги сделать SET**
 - Показывать входящие слова - http://159.69.208.209:8080/words/199/edit
 - Отображать гласные согласные загадкой С реверсом
 - Кнопка базовая фраза - http://159.69.208.209:8080/words/135
@@ -61,25 +63,20 @@ This app helps me to learn Thai
 
 ## MySQL
 ```bash
-docker run --name mysql -d --restart always -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=seo -p 306:3306 mysql:8
+docker run --name mysql -d --restart always -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=seo -p 127.0.0.1:3306:3306 mysql:8
 docker run --name myadmin -d --link mysql:db --restart always -p 8090:80 phpmyadmin/phpmyadmin
 ```
 
 
 ## Run locally
 
-```python
-python3 -m venv venv
-
-sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
-pip install -r requirements.txt
-```
+Look [Dockefile](Dockefile)
 
 
 ## Run on server
 
-```bash
-docker build -f Dockerfile -t phrases . && \
-docker rm -f phrases || true && \
-docker run -d --name phrases --link mysql:mysql  -e 'SQLALCHEMY_DATABASE_URI=mysql://root:@mysql/phrases' -p 8080:8081 --restart always phrases
-```
+Look [update.sh](update.sh)
+
+
+## Cron
+* */3 * * * /root/phrases/update.sh

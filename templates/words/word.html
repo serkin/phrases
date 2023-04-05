@@ -56,7 +56,7 @@
         <i class="dropdown icon"></i>Ответ
     </div>
     <div class="content">
-        <p><span class="ui big text">{{ word.th }}</span></p>
+        <p><span class="ui big text">{{ word.th }}{% if word.spelling %} [{{ word.spelling }}]{% endif %}</span></p>
     </div>
     {% if children %}
     <div class="title">

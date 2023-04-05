@@ -1,25 +1,34 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<form class="ui form" action="{{ url_for('dialogs.dialog', dialog_id=dialog.id) }}" method="post" >
-    <table class="ui compact celled table">
-        <thead>
-            <tr>
-                <th>User</th>
-                <th>Word</th>
-                <th>th</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dialog_word in dialog_words %}
-            <tr>
-                <td>{{ dialog_word.dialog_person_name }}</td>
-                <td>{{ dialog_word.base }}</td>
-                <td>
-                    <input type="text" name="{{ dialog_word.word_id }}">
-                </td>
-            </tr>
-            {% endfor %}
+<style>
+    table {
+        border-style: none;
+    }
+
+    .ui.table>tbody>tr>td{
+        border-top: 0px
+    }
+</style>
+<p>&nbsp;</p>
+<form class="ui form" action="{{ url_for('dialogs.dialog', dialog_id=dialog.id) }}" method="POST">
+    <table class="ui compact table" style="border-style: none">
+
+        {% for dialog_word in dialog_words %}
+        <tr>
+            {% if initiator != dialog_word.dialog_person_name %}<td></td>{% endif %}
+            <td>
+                <div class="field{% if method == 'POST' and (dialog_word.word_id not in answers or answers[dialog_word.word_id] != dialog_word.th) %} error{% endif %}">
+                <label><b>{{ dialog_word.dialog_person_name }}:</b> <a href="{{ url_for('words.word', word_id=dialog_word.word_id) }}">{{ dialog_word.base }}</a></label>
+                <input type="text" name="word_id__{{ dialog_word.word_id }}" 
+                    value="{% if dialog_word.word_id in answers %}{{ answers[dialog_word.word_id] }}{% endif %}">
+                    {% if method == 'POST' and (dialog_word.word_id not in answers or answers[dialog_word.word_id] != dialog_word.th) %}<span class="ui green big text">{{ dialog_word.th }}{% if dialog_word.spelling %} [{{ dialog_word.spelling }}]{% endif %}</span>{% endif %}
+                    </div>
+            </td>
+            {% if initiator == dialog_word.dialog_person_name %}<td></td>{% endif %}
+
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
     <button type="submit" class="ui button">Проверить</button>
