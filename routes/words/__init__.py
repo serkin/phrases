@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import redirect, render_template, request, Blueprint, url_for
+from flask import redirect, render_template, request, Blueprint, url_for, session
 
 from models import Word, WordsComposition
 
@@ -21,7 +21,13 @@ def create():
         word.tags = form.get("tags") or None
 
         db.session.add(word)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            word = db.session.query(Word).filter(
+                Word.base == word.base, Word.th == word.th).first()
+            return redirect(url_for("words.word", word_id=word.id))
 
         return redirect(url_for("words.word", word_id=word.id))
     return render_template("words/form.html")
@@ -65,9 +71,15 @@ def word(word_id):
 
 @bp.route("")
 def index():
+    if "favourites" not in session:
+        session["favourites"] = []
     query = db.session.query(Word).filter(Word.hidden_at.is_(
         None)).order_by(Word.is_active.desc(), Word.base)
-    return render_template("words/index.html", words=query.all())
+    
+    if request.args.get("favourites") and session["favourites"]:
+        query = query.filter(Word.id.in_(session["favourites"]))
+
+    return render_template("words/index.html", words=query.all(), favourites=session['favourites'])
 
 
 bp.register_blueprint(word_bp.bp)

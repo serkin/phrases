@@ -33,6 +33,9 @@
                     <a class="item" href="{{ url_for('home', all=1) }}"><i class="home icon"></i> All</a>
                     <a class="item" href="{{ url_for('home', tag='numbers') }}"><i class="file icon"></i> Numbers</a>
                     <a class="item" href="{{ url_for('home', tag='colors') }}"><i class="adjust icon"></i> Colors</a>
+                    <a class="item" href="{{ url_for('words.index', favourites=1) }}"><i class="heart icon"></i> Favourites</a>
+                    <a class="item" href="http://thai-alphabet.com/" target="_blank">Alphabet</a>
+                    <a class="item" href="{{ url_for('articles.index') }}">Articles</a>
                 </div>
             </div>
         </div>

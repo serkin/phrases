@@ -3,3 +3,4 @@ blinker
 Flask-Session
 Flask-SQLAlchemy
 mysqlclient
+Markdown

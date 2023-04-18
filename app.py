@@ -2,7 +2,7 @@ from flask import Flask, redirect, session, url_for, request
 import os
 from flask_session import Session
 from models import Word
-from routes import words, api, dialogs
+from routes import words, api, dialogs, articles
 from db import db
 
 app = Flask(__name__)
@@ -36,6 +36,7 @@ def create_app():
     app.register_blueprint(words.bp)
     app.register_blueprint(api.bp)
     app.register_blueprint(dialogs.bp)
+    app.register_blueprint(articles.bp)
 
     return app
 

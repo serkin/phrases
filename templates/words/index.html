@@ -2,6 +2,54 @@
 
 {% block content %}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/components/dropdown.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/components/dropdown.min.css">
+
+<script>
+    $(document).ready(function () {
+
+        $('.words_dropdown').dropdown({
+            clearable: true,
+            fullTextSearch: true,
+            filterRemoteData: true,
+            onChange: function (value) {
+                window.location.replace("/words/" + value);
+            },
+            apiSettings: {
+                url: '/api/words?q={query}',
+                cache: false
+            }
+        });
+
+    });
+
+    function toggle_favourites(word_id) {
+        var el = $('#favourite_word_' + word_id)
+        $.ajax({
+            type: 'GET',
+            url: '/words/' + word_id + '/toggle_favourites',
+            data: { },
+            success: function (response) {
+                console.log(response)
+                if (response["status"] == 1) {
+                    el.removeClass('outline')
+                } else {
+                    el.addClass('outline')
+                }
+            }
+        });
+    }
+</script>
+<div>&nbsp;</div>
+<div>
+    <select class="ui fluid search words_dropdown">
+    </select>
+
+</div>
+
+
 <table class="ui compact celled table">
     <thead>
         <tr>
@@ -17,13 +65,17 @@
         <tr>
             <td><a href="{{ url_for('words.word', word_id=word.id) }}">{{ word.base }}</a></td>
             <td><span class="ui big text">{{ word.th }}</span></td>
-            <td><a target="_blank" href="https://translate.google.ru/?sl=th&tl=en&text={{ word.th }}"><i class="google icon"></i></a></td>
+            <td><a target="_blank" href="https://translate.google.ru/?sl=th&tl=en&text={{ word.th }}"><i
+                        class="google icon"></i></a></td>
             <td>{{ word.tags or '' }}</td>
             <td>{% if word.is_active %}
-                <a href="{{ url_for('words.word.deactivate', word_id=word.id)}}" class="ui tiny red button">deactivate</a>
+                <a href="{{ url_for('words.word.deactivate', word_id=word.id)}}"
+                    class="ui tiny red button">deactivate</a>
                 {% else %}
                 <a href="{{ url_for('words.word.activate', word_id=word.id)}}" class="ui primary button">activate</a>
                 {% endif %}
+                <button onclick='toggle_favourites({{ word.id }})' class='ui button'><i id="favourite_word_{{ word.id }}" 
+                        class="heart{% if word.id not in favourites%} outline{% endif %} icon"></i></button>
             </td>
         </tr>
 

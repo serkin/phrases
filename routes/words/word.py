@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, session, jsonify
 from flask import Blueprint
 from sqlalchemy import delete
 from models import Word, WordsComposition
@@ -36,10 +36,24 @@ def activate(word_id):
     return redirect(url_for("words.word", word_id=word_id))
 
 
+@bp.route("/toggle_favourites")
+def toggle_favourites(word_id):
+    word = db.session.query(Word).get_or_404(word_id)
+    if "favourites" not in session:
+        session["favourites"] = []
+    if word.id not in session["favourites"]:
+        session["favourites"].append(word.id)
+    else:
+        session["favourites"].remove(word.id)
+
+    return jsonify({"status": word.id in session["favourites"]})
+
+
 @bp.route("/bind", methods=['POST'])
 def bind(word_id):
     form = request.form
-    words_composition = WordsComposition(word_id=word_id, child_word_id=form.get("word_id"))
+    words_composition = WordsComposition(
+        word_id=word_id, child_word_id=form.get("word_id"))
     db.session.add(words_composition)
     db.session.commit()
     return redirect(url_for("words.word", word_id=word_id))
@@ -48,7 +62,8 @@ def bind(word_id):
 @bp.route("/unbind")
 def unbind(word_id):
     form = request.args
-    db.session.execute(delete(WordsComposition).where(WordsComposition.word_id == word_id, WordsComposition.child_word_id == form.get("child_word_id")))
+    db.session.execute(delete(WordsComposition).where(WordsComposition.word_id ==
+                       word_id, WordsComposition.child_word_id == form.get("child_word_id")))
     db.session.commit()
     return redirect(url_for("words.word", word_id=word_id))
 
