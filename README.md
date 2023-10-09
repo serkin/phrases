@@ -58,7 +58,7 @@ This app helps me to learn Thai
 
 ## MySQL
 ```bash
-docker run --name mysql -d --restart always -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=seo -p 127.0.0.1:3306:3306 mysql:8
+docker run --name mysql -d --restart always -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=phrases -p 127.0.0.1:3306:3306 mysql:8
 docker run --name myadmin -d --link mysql:db --restart always -p 8090:80 phpmyadmin/phpmyadmin
 ```
 
