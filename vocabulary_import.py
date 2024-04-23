@@ -9,9 +9,9 @@ mycursor = cnx.cursor()
 text = """"""
 
 for line in text.readlines():
-    th, spelling, base, comment = line.split("/")
+    th, spelling, en, comment = line.split("/")
     mycursor.execute(
-        "INSERT IGNORE INTO words (th, spelling, base, comment) VALUES (%s, %s, %s, %s);", (th, spelling, base, comment))
+        "INSERT IGNORE INTO words (th, spelling, en, comment) VALUES (%s, %s, %s, %s);", (th, spelling, en, comment))
     cnx.commit()
 
 mycursor.close()

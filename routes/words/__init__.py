@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import redirect, render_template, request, Blueprint, url_for, session
 
-from models import Word, WordsComposition
+from models import Word, Attempt
 
 from ..words import word as word_bp
 from db import db
@@ -14,10 +14,9 @@ def create():
         form = request.form
 
         word = Word()
-        word.base = form.get("base")
-        word.comment = form.get("comment") or None
+        word.en = form.get("en")
         word.spelling = form.get("spelling") or None
-        word.th = form.get("th") or None
+        word.vi = form.get("vi") or None
         word.tags = form.get("tags") or None
 
         db.session.add(word)
@@ -26,7 +25,7 @@ def create():
         except:
             db.session.rollback()
             word = db.session.query(Word).filter(
-                Word.base == word.base, Word.th == word.th).first()
+                Word.en == word.en, Word.vi == word.vi).first()
             return redirect(url_for("words.word", word_id=word.id))
 
         return redirect(url_for("words.word", word_id=word.id))
@@ -41,32 +40,17 @@ def word(word_id):
 
     word = db.session.query(Word).filter(Word.id == word_id).first()
 
-    query = db.session.query(Word.base, Word.th, Word.id) \
-        .select_from(WordsComposition) \
-        .join(Word, WordsComposition.child_word_id == Word.id) \
-        .filter(WordsComposition.word_id == word_id) \
-        .order_by(WordsComposition.id)
-
-    children = query.all()
-
-    query = db.session.query(Word.base, Word.th, Word.id) \
-        .select_from(WordsComposition) \
-        .join(Word, WordsComposition.word_id == Word.id) \
-        .filter(WordsComposition.child_word_id == word_id) \
-        .order_by(WordsComposition.id)
-
-    parents = query.all()
-
     # Handling User Response
     if user_answer:
-        if word.th == user_answer:
-            user_result = "success"
-        else:
-            user_result = "fail"
+        word.last_attempt_at = datetime.now()
+        
+        attempt = Attempt()
+        attempt.word_id = word.id
+        attempt.is_correct = 'yes' if word.vi == user_answer else 'no'
 
-        word.answered_at = datetime.now()
+        db.session.add(attempt)        
         db.session.commit()
-    return render_template("words/word.html", word=word, parents=parents, children=children, user_answer=user_answer, user_result=user_result)
+    return render_template("words/word.html", word=word, parents=[], children=[], user_answer=user_answer, user_result=user_result)
 
 
 @bp.route("")
@@ -74,7 +58,7 @@ def index():
     if "favourites" not in session:
         session["favourites"] = []
     query = db.session.query(Word).filter(Word.hidden_at.is_(
-        None)).order_by(Word.is_active.desc(), Word.base)
+        None)).order_by(Word.is_active.desc(), Word.en)
     
     if request.args.get("favourites") and session["favourites"]:
         query = query.filter(Word.id.in_(session["favourites"]))

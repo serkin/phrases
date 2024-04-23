@@ -7,12 +7,12 @@
     action="{% if word %}{{ url_for('words.word.edit', word_id=word.id) }}{% else %}{{ url_for('words.create') }}{% endif %}"
     method="post" autocomplete="off">
     <div class="required field">
-        <label>Base</label>
-        <input type="text" name="base" value="{% if word %}{{ word.base }}{% endif %}" required>
+        <label>EN</label>
+        <input type="text" name="en" value="{% if word %}{{ word.en }}{% endif %}" required>
     </div>
     <div class="field">
-        <label>th</label>
-        <input type="text" name="th" value="{% if word %}{{ word.th or '' }}{% endif %}" autofocus>
+        <label>vi</label>
+        <input type="text" name="vi" value="{% if word %}{{ word.vi or '' }}{% endif %}" autofocus>
     </div>
     <div class="field">
         <label>Priority</label>
@@ -32,10 +32,6 @@
             </option>
             {% endfor %}
         </select>
-    </div>
-    <div class="field">
-        <label>Comment</label>
-        <textarea name="comment">{% if word %}{{ word.comment or '' }}{% endif %}</textarea>
     </div>
     <button class="ui teal button" type="submit">Save</button>
 </form>

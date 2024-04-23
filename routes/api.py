@@ -10,13 +10,13 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 @bp.route("/words")
 def words():
     result = []
-    query = db.session.query(Word).order_by(func.length(Word.th))
+    query = db.session.query(Word).order_by(func.length(Word.vi))
 
     for word in query.all():
         result.append(
             {
                 "value": str(word.id),
-                "name": word.base + f" - {word.th}" if word.th else ''
+                "name": word.en + f" - {word.vi}" if word.vi else ''
             }
         )
     return jsonify({"results": result, "success": True})

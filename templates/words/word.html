@@ -3,13 +3,13 @@
 {% block content %}
 
 
-<h1>{{ word.base }}</h1>
+<h1>{{ word.en }}</h1>
 {% if user_answer %}
-<p><span class="ui big text">{{ word.th }}</span></p>
-<p><span class="ui big {% if word.th == user_answer %}green{% else %}red{% endif %} text">{{ user_answer }}</span></p>
+<p><span class="ui big text">{{ word.vi }}</span></p>
+<p><span class="ui big {% if word.vi == user_answer %}green{% else %}red{% endif %} text">{{ user_answer }}</span></p>
 {% endif %}
 
-{% if not user_answer or word.th != user_answer %}
+{% if not user_answer or word.vi != user_answer %}
 <form action="{{ url_for('words.word', word_id=word.id) }}" method="post" autocomplete="off" class="ui form">
     {% if result == "fail" %}
     <input type="hidden" name="second_attempt" value=1>
@@ -56,7 +56,7 @@
         <i class="dropdown icon"></i>Ответ
     </div>
     <div class="content">
-        <p><span class="ui big text">{{ word.th }}{% if word.spelling %} [{{ word.spelling }}]{% endif %}</span></p>
+        <p><span class="ui big text">{{ word.vi }}{% if word.spelling %} [{{ word.spelling }}]{% endif %}</span></p>
     </div>
     {% if children %}
     <div class="title">
@@ -67,9 +67,8 @@
         <table class="ui celled table">
             {% for el in children %}
             <tr>
-                <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.base }}</a></td>
-                <td>{{ el.th }}</td>
-                <td><a href="{{ url_for('words.word.unbind', word_id=word.id, child_word_id=el.id)}}" class="ui tiny button">Отвязать</a></td>
+                <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.en }}</a></td>
+                <td>{{ el.vi }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -85,8 +84,8 @@
         <table class="ui celled table">
             {% for el in parents %}
             <tr>
-                <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.base }}</a></td>
-                <td>{{ el.th }}</td>
+                <td><a href="{{ url_for('words.word', word_id=el.id) }}">{{ el.en }}</a></td>
+                <td>{{ el.vi }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -105,23 +104,6 @@
         </p>
     </div>
     {% endif %}
-    <div class="title">
-        <i class="dropdown icon"></i>Добавить слово
-    </div>
-    <div class="content">
-        <p>
-        <form class="ui form" action="{{ url_for('words.word.bind', word_id=word.id) }}" method="post">
-            <div class="inline required field">
-                <label>Слово</label>
-                <div>
-                    <select class="ui fluid search words_dropdown" name="word_id" required>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="ui button">Привязать</button>
-        </form>
-        </p>
-    </div>
 </div>
 
 <div>&nbsp;</div>

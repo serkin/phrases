@@ -24,23 +24,6 @@
         });
 
     });
-
-    function toggle_favourites(word_id) {
-        var el = $('#favourite_word_' + word_id)
-        $.ajax({
-            type: 'GET',
-            url: '/words/' + word_id + '/toggle_favourites',
-            data: { },
-            success: function (response) {
-                console.log(response)
-                if (response["status"] == 1) {
-                    el.removeClass('outline')
-                } else {
-                    el.addClass('outline')
-                }
-            }
-        });
-    }
 </script>
 <div>&nbsp;</div>
 <div>
@@ -54,7 +37,7 @@
     <thead>
         <tr>
             <th>Слово</th>
-            <th>th</th>
+            <th>vi</th>
             <th>Translation</th>
             <th>Tags</th>
             <th>Manage</th>
@@ -63,9 +46,9 @@
     <tbody>
         {% for word in words %}
         <tr>
-            <td><a href="{{ url_for('words.word', word_id=word.id) }}">{{ word.base }}</a></td>
-            <td><span class="ui big text">{{ word.th }}</span></td>
-            <td><a target="_blank" href="https://translate.google.ru/?sl=th&tl=en&text={{ word.th }}"><i
+            <td><a href="{{ url_for('words.word', word_id=word.id) }}">{{ word.en }}</a></td>
+            <td><span class="ui big text">{{ word.vi }}</span></td>
+            <td><a target="_blank" href="https://translate.google.ru/?sl=th&tl=en&text={{ word.vi }}"><i
                         class="google icon"></i></a></td>
             <td>{{ word.tags or '' }}</td>
             <td>{% if word.is_active %}
@@ -74,8 +57,6 @@
                 {% else %}
                 <a href="{{ url_for('words.word.activate', word_id=word.id)}}" class="ui primary button">activate</a>
                 {% endif %}
-                <button onclick='toggle_favourites({{ word.id }})' class='ui button'><i id="favourite_word_{{ word.id }}" 
-                        class="heart{% if word.id not in favourites%} outline{% endif %} icon"></i></button>
             </td>
         </tr>
 
